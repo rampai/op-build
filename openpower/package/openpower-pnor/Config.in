@@ -89,6 +89,24 @@ config BR2_SKIBOOT_LID_XZ_NAME
         help
             String used to define compressed skiboot lid filename
 
+config BR2_ULTRAVISOR_LID_NAME
+        string "Name of ultravisor lid name to be used"
+        default "ultra.lid"
+        help
+            String used to define ultravisor lid filename
+
+config BR2_TARGET_ULTRAVISOR_XZ
+        bool "Compress the ultravisor image with XZ"
+        select BR2_OPENPOWER_PNOR_XZ_ENABLED
+        default y
+
+config BR2_ULTRAVISOR_LID_XZ_NAME
+        string "Name of compressed ultravisor lid"
+        default "ultra.lid" if !BR2_TARGET_ULTRAVISOR_XZ
+        default "ultra.lid.xz" if BR2_TARGET_ULTRAVISOR_XZ
+        help
+            String used to define compressed ultravisor lid filename
+
 config BR2_HOSTBOOT_BINARY_SBE_FILENAME
         string "Name of sbe hostboot binary"
         help

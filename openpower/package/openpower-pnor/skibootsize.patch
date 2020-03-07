@@ -1,0 +1,28 @@
+diff -urNdap a/p9Layouts/defaultPnorLayout_64.xml b/p9Layouts/defaultPnorLayout_64.xml
+--- a/p9Layouts/defaultPnorLayout_64.xml	2019-09-20 11:17:08.332565455 -0700
++++ b/p9LayoutsdefaultPnorLayout_64.xml	2019-09-20 11:31:16.448306081 -0700
+@@ -213,19 +213,19 @@ Layout Description
+         <ecc/>
+     </section>
+     <section>
+-        <description>Payload (0.5MB)</description>
++        <description>Payload (0.625MB)</description>
+         <eyeCatch>PAYLOAD</eyeCatch>
+         <physicalOffset>0x20C1000</physicalOffset>
+-        <physicalRegionSize>0x80000</physicalRegionSize>
++        <physicalRegionSize>0xA0000</physicalRegionSize>
+         <side>A</side>
+         <sha512Version/>
+         <readOnly/>
+     </section>
+     <section>
+-        <description>Bootloader Kernel (15.5MB)</description>
++        <description>Bootloader Kernel (15.375MB)</description>
+         <eyeCatch>BOOTKERNEL</eyeCatch>
+-        <physicalOffset>0x2141000</physicalOffset>
+-        <physicalRegionSize>0xF80000</physicalRegionSize>
++        <physicalOffset>0x2161000</physicalOffset>
++        <physicalRegionSize>0xF60000</physicalRegionSize>
+         <side>A</side>
+         <sha512Version/>
+         <readOnly/>

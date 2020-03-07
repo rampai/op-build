@@ -1,0 +1,75 @@
+diff -urNdap pnor.orig/create_pnor_image.pl pnor/create_pnor_image.pl
+--- pnor.orig/create_pnor_image.pl	2020-03-25 12:28:40.750316072 -0400
++++ pnor/create_pnor_image.pl	2020-03-25 12:36:38.479955049 -0400
+@@ -25,6 +25,7 @@ my $openpower_version_filename = "";
+ my $wofdata_binary_filename = "";
+ my $memddata_binary_filename = "";
+ my $hdat_binary_filename = "";
++my $uvisor_binary_filename = "";
+ my $ocmbfw_binary_filename = "";
+ 
+ while (@ARGV > 0){
+@@ -116,6 +117,10 @@ while (@ARGV > 0){
+         $hdat_binary_filename = $ARGV[1] or die "Bad command line arg given: expecting an hdat binary filename.\n";
+         shift;
+     }
++    elsif (/^-uvisor_binary_filename/i){
++        $uvisor_binary_filename = $ARGV[1] or die "Bad command line arg given: expecting an uvisor binary filename.\n";
++        shift;
++    }
+     elsif (/^-ocmbfw_binary_filename/i){
+         $ocmbfw_binary_filename = $ARGV[1] or die "Bad command line arg given: expecting an ocmbfw binary filename.\n";
+         shift;
+@@ -208,6 +213,11 @@ if (checkForPnorPartition("OCMBFW", $par
+     $build_pnor_command .= " --binFile_OCMBFW $ocmbfw_binary_filename";
+ }
+ 
++if (checkForPnorPartition("UVISOR", $parsed_pnor_layout))
++{
++    $build_pnor_command .= " --binFile_UVISOR $uvisor_binary_filename";
++}
++
+ # Add sections based on processor family type
+ if ($release eq "p9"){
+     $build_pnor_command .= " --binFile_WOFDATA $wofdata_binary_filename" if -e $wofdata_binary_filename;
+diff -urNdap pnor.orig/update_image.pl pnor/update_image.pl
+--- pnor.orig/update_image.pl	2020-03-25 12:28:40.750316072 -0400
++++ pnor/update_image.pl	2020-03-25 12:42:46.407350241 -0400
+@@ -39,6 +39,7 @@ my $pnor_layout = "";
+ my $debug = 0;
+ my $sign_mode = "";
+ my $hdat_binary_filename = "";
++my $uvisor_filename = "";
+ my $ocmbfw_original_filename = "";
+ my $ocmbfw_binary_filename = "";
+ my $ocmbfw_version = "0.1"; #default value if none passed via command line
+@@ -178,6 +179,11 @@ while (@ARGV > 0){
+         $hdat_binary_filename = $ARGV[1];
+         shift;
+     }
++    elsif(/^-uvisor_filename/i){
++        # This filename is necessary if the file exists, but if its not given, we add blank partition
++        $uvisor_filename = $ARGV[1];
++        shift;
++    }
+     elsif(/^-ocmbfw_original_filename/i){
+         # This filename is necessary if the file exists, but if its not given, we add in a blank partition
+         $ocmbfw_original_filename = $ARGV[1];
+@@ -392,6 +398,17 @@ sub processConvergedSections {
+     }
+     $sections{HDAT}{out}       = "$scratch_dir/hdat.bin.ecc";
+ 
++    # Populate the UVISOR partition if it exists in the layout
++    if(-e $uvisor_filename)
++    {
++        $sections{UVISOR}{in}    = "$uvisor_filename";
++    }
++    else
++    {
++        print "WARNING: UVISOR partition is not found, including blank binary instead\n";
++    }
++    $sections{UVISOR}{out}       = "$scratch_dir/uvisor.bin";
++
+     # Populate OCMBFW partition if it exists in the layout
+     if(checkForPnorPartition("OCMBFW", $parsed_pnor_layout))
+     {

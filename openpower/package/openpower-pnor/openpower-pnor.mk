@@ -9,7 +9,7 @@ OPENPOWER_PNOR_SITE ?= $(call github,open-power,pnor,$(OPENPOWER_PNOR_VERSION))
 
 OPENPOWER_PNOR_LICENSE = Apache-2.0
 OPENPOWER_PNOR_LICENSE_FILES = LICENSE
-OPENPOWER_PNOR_DEPENDENCIES = hostboot-binaries machine-xml skiboot host-openpower-ffs capp-ucode host-openpower-pnor-util
+OPENPOWER_PNOR_DEPENDENCIES = hostboot-binaries machine-xml skiboot host-openpower-ffs capp-ucode host-openpower-pnor-util ultravisor
 
 ifeq ($(BR2_OPENPOWER_POWER9),y)
 OPENPOWER_PNOR_DEPENDENCIES += hcode
@@ -90,6 +90,9 @@ ifeq ($(BR2_PACKAGE_HOSTBOOT),y)
 OPENPOWER_VERSIONED_SUBPACKAGES += hostboot occ
 endif
 OPENPOWER_VERSIONED_SUBPACKAGES += linux petitboot machine-xml hostboot-binaries capp-ucode
+ifeq ($(BR2_PACKAGE_ULTRAVISOR),y)
+OPENPOWER_VERSIONED_SUBPACKAGES += ultravisor
+endif
 OPENPOWER_PNOR = openpower-pnor
 
 ifeq ($(BR2_OPENPOWER_POWER9),y)
@@ -132,6 +135,7 @@ define OPENPOWER_PNOR_INSTALL_IMAGES_CMDS
             -payload $(BINARIES_DIR)/$(BR2_SKIBOOT_LID_NAME) \
             -payload_filename $(BR2_SKIBOOT_LID_XZ_NAME) \
             -binary_dir $(BINARIES_DIR) \
+	    -uvisor_filename  $(BINARIES_DIR)/ultra.lid.xz \
             -bootkernel_filename $(LINUX_IMAGE_NAME) \
 	    -ocmbfw_version $(BR2_OCMB_EXPLORER_FW_VERSION) \
 	    -ocmbfw_url $(BR2_OCMB_EXPLORER_FW_URL) \
@@ -160,6 +164,7 @@ define OPENPOWER_PNOR_INSTALL_IMAGES_CMDS
             -wofdata_binary_filename $(OPENPOWER_PNOR_SCRATCH_DIR)/$(BR2_WOFDATA_BINARY_FILENAME) \
             -memddata_binary_filename $(OPENPOWER_PNOR_SCRATCH_DIR)/$(BR2_MEMDDATA_BINARY_FILENAME) \
             -ocmbfw_binary_filename $(OPENPOWER_PNOR_SCRATCH_DIR)/$(BR2_OCMBFW_PROCESSED_FILENAME) \
+	    -uvisor_binary_filename $(OPENPOWER_PNOR_SCRATCH_DIR)/uvisor.bin \
             -openpower_version_filename $(OPENPOWER_PNOR_SCRATCH_DIR)/openpower_pnor_version.bin
 
         $(INSTALL) $(STAGING_DIR)/pnor/$(BR2_OPENPOWER_PNOR_FILENAME) $(BINARIES_DIR)
