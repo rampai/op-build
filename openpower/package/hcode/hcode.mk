@@ -40,6 +40,8 @@ define HCODE_INSTALL_IMAGES_CMDS
 endef
 
 define HCODE_BUILD_CMDS
+		# copy selfRest.bin file
+		$(HCODE_ENV_VARS) bash -c 'cp $(BR2_EXTERNAL)/package/hcode/selfRest.bin $(@D)/import/chips/p9/procedures/utils/stopreg'
 		$(HCODE_ENV_VARS) bash -c 'cd $(@D) && source ./env.bash && $(MAKE) '
 endef
 
