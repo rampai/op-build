@@ -5,4 +5,9 @@ cd $script_base
 
 . op-build-env
 
+#HACK: copy the machine specific patches
+#to the top level directory of the machine-xml
+#project
+apply-machine-xml-patches ${1%%_*}
+
 op-build $@

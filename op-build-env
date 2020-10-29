@@ -16,6 +16,20 @@ export BR2_DL_DIR=${__PWD}/dl
 
 export LANG=en_US.UTF-8
 
+apply-machine-xml-patches () {
+	machine=$1
+	if [ -z "$machine" ]
+	then
+		return 0;
+	fi
+	if [ -d openpower/package/machine-xml/$machine ]
+	then
+		rm -f openpower/package/machine-xml/*.patch
+		cp -fl openpower/package/machine-xml/$machine/*.patch openpower/package/machine-xml/
+	fi
+	return 0;
+}
+
 op-build () {
     make --directory=${__PWD}/buildroot O=${__PWD}/output $@
 }
