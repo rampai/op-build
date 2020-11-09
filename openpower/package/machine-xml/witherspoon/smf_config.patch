@@ -1,0 +1,29 @@
+From bc6444b8d7ca09230061ce31f74fbed8cc4caed6 Mon Sep 17 00:00:00 2001
+From: Ilya Smirnov <ismirno@us.ibm.com>
+Date: Tue, 18 Jun 2019 13:20:52 -0500
+Subject: [PATCH] Add and Enable SMF Attributes
+
+SMF_ENABLE is set to 1
+PROC_SMF_BAR_SIZE is set to 0x0200000000
+---
+ witherspoon.xml | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/witherspoon.xml b/witherspoon.xml
+index e289115..7d904df 100644
+--- a/witherspoon.xml
++++ b/witherspoon.xml
+@@ -16922,6 +16922,10 @@
+ 		<id>SECURITY_ENABLE</id>
+ 		<default></default>
+ 	</attribute>
++    <attribute>
++        <id>SMF_CONFIG</id>
++        <default>1</default>
++    </attribute>
+ 	<attribute>
+ 		<id>SPIPSS_FREQUENCY</id>
+ 		<default></default>
+-- 
+1.8.3.1
+
